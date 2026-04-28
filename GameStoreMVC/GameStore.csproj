@@ -1,0 +1,6 @@
+﻿namespace GameStoreMVC
+{
+    public class GameStore
+    {
+    }
+}  
