@@ -1,7 +1,15 @@
-﻿namespace GameStoreMVC.Models.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GameStore.Models.ViewModels
 {
-    
-    public class Usuario
+    public class LoginViewModel
     {
+        [Required(ErrorMessage = "E-mail é obrigatório")]
+        [EmailAddress(ErrorMessage = "E-mail inválido")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Senha é obrigatória")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = string.Empty;
     }
 }
