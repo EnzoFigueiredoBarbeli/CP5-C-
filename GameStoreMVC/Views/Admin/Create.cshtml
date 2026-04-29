@@ -1,6 +1,39 @@
-﻿namespace GameStoreMVC.Views.Admin
-{
-    public class Create
-    {
-    }
+﻿@model GameStore.Models.Game
+@{
+    ViewData["Title"] = "Novo Game";
+}
+
+<div class="container" style="max-width: 600px;">
+    <h2 class="my-4">📌 Cadastrar Novo Jogo</h2>
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Título do Jogo</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ShortDescription" class="form-label">Descrição Curta</label>
+            <textarea asp-for="ShortDescription" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Preço (R$)</label>
+            <input asp-for="Price" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ImageUrl" class="form-label">URL da Capa</label>
+            <input asp-for="ImageUrl" class="form-control" placeholder="https://exemplo.com/capa.jpg" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

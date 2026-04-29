@@ -1,6 +1,35 @@
-﻿namespace GameStoreMVC.Views.Account
-{
-    public class Login
-    {
-    }
+﻿@model GameStore.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container" style="max-width: 500px; margin-top: 80px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>Login</h3>
+            <span>Envie para gerenciar suas games</span>
+        </div>
+        <div class="card-body">
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">E-mail</label>
+                    <input asp-for="Email" class="form-control" placeholder="seu@email.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Senha</label>
+                    <input asp-for="Password" class="form-control" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Assinar Acesso</button>
+            </form>
+            <hr />
+            <p class="text-center">Ainda não tem uma conta? <a href="/Account/Register">Crie nova conta</a></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
