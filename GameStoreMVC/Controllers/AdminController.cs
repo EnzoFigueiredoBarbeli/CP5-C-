@@ -1,33 +1,79 @@
-using GameStoreMVC.Interfaces;
-using GameStoreMVC.Models;
+using GameStore.Models;
+using GameStore.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
-namespace GameStoreMVC.Controllers
+namespace GameStore.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly ILogger<AdminController> _logger;
-        private readonly IGameRepositorio _gameRepositorio;
+        private readonly IGameRepository _gameRepository;
 
-        public AdminController(ILogger<AdminController> logger, IGameRepositorio gameRepositorio)
+        public AdminController(IGameRepository gameRepository)
         {
-            _logger = logger;
-            _gameRepositorio = gameRepositorio;
+            _gameRepository = gameRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            
+            var games = await _gameRepository.GetAllAsync();
+            return View(games);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
             return View();
         }
 
-    
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Game game)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (ModelState.IsValid)
+            {
+                await _gameRepository.AddAsync(game);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(game);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var game = await _gameRepository.GetByIdAsync(id);
+            if (game == null) return NotFound();
+            return View(game);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Game game)
+        {
+            if (id != game.Id) return NotFound();
+            if (ModelState.IsValid)
+            {
+                await _gameRepository.UpdateAsync(game);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(game);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var game = await _gameRepository.GetByIdAsync(id);
+            if (game == null) return NotFound();
+            return View(game);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _gameRepository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
